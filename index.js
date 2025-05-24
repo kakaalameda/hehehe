@@ -4,6 +4,11 @@ import { buildBook } from './lib/buildEpub.js';
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
+// ⚠️ Xoá webhook cũ để tránh xung đột polling
+bot.telegram.deleteWebhook().then(() => {
+  console.log("✅ Webhook deleted, using polling mode.");
+});
+
 bot.command('newbook', async ctx => {
   const rawTitle = ctx.message.text.replace('/newbook', '').trim();
   if (!rawTitle) return ctx.reply('📖  Vui lòng thêm tiêu đề, ví dụ: /newbook How to use GoLogin');
@@ -19,4 +24,5 @@ bot.command('newbook', async ctx => {
   }
 });
 
+// ✅ Bật chế độ polling an toàn
 bot.launch({ polling: true });
