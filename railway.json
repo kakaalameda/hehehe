@@ -1,0 +1,10 @@
+{
+  "build": {
+    "env": {
+      "NPM_CONFIG_PRODUCTION": "true"
+    }
+  },
+  "deploy": {
+    "startCommand": "npm start"
+  }
+}
