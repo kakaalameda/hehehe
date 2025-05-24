@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { Telegraf } from 'telegraf';
 import { buildBook } from './lib/buildEpub.js';
+import pTimeout from 'p-timeout';
 
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
@@ -16,7 +17,12 @@ bot.command('newbook', async ctx => {
   await ctx.reply(`✏️ Bắt đầu tạo sách: “${rawTitle}”...`);
 
   try {
-    const epubPath = await buildBook(rawTitle, ctx);
+    // ✅ Thêm timeout 500s cho toàn bộ quá trình tạo sách
+    const epubPath = await pTimeout(
+      buildBook(rawTitle, ctx),
+      500_000,
+      '📕 Timeout toàn bộ quá trình tạo sách (buildBook)'
+    );
     await ctx.replyWithDocument({ source: epubPath, filename: `${rawTitle}.epub` });
   } catch (err) {
     console.error('❌ Unhandled error in buildBook:', err);
