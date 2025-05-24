@@ -3,7 +3,9 @@ import { Telegraf } from 'telegraf';
 import { buildBook } from './lib/buildEpub.js';
 import pTimeout from 'p-timeout';
 
-const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
+const bot = new Telegraf(process.env.TELEGRAM_TOKEN, {
+  handlerTimeout: 0  // ✅ tắt giới hạn timeout của Telegraf
+});
 
 // ⚠️ Xoá webhook cũ để tránh xung đột polling
 bot.telegram.deleteWebhook().then(() => {
